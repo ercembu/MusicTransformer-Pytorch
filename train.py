@@ -6,6 +6,7 @@ import torch.nn as nn
 from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data import DataLoader
 from torch.optim import Adam
+from collections import namedtuple
 
 from dataset.e_piano import create_epiano_datasets, compute_epiano_accuracy
 
@@ -74,9 +75,14 @@ def main():
     val_loader = DataLoader(val_dataset, batch_size=args.batch_size, num_workers=args.n_workers)
     test_loader = DataLoader(test_dataset, batch_size=args.batch_size, num_workers=args.n_workers)
 
+    if args.mamba:
+        MambaCfg = namedtuple('MambaCfg', ['d_state', 'd_conv', 'expand', 'n_layer'])
+        mamba_cfg = MambaCfg(args.d_state, args.d_conv, args.expand, args.n_mamba)
+    else:
+        mamba_cfg = None
     model = MusicTransformer(n_layers=args.n_layers, num_heads=args.num_heads,
                 d_model=args.d_model, dim_feedforward=args.dim_feedforward, dropout=args.dropout,
-                max_sequence=args.max_sequence, rpr=args.rpr).to(get_device())
+                max_sequence=args.max_sequence, rpr=args.rpr, mamba=args.mamba, mamba_cfg=mamba_cfg).to(get_device())
 
     ##### Continuing from previous training session #####
     start_epoch = BASELINE_EPOCH

@@ -32,6 +32,11 @@ def parse_train_args():
     parser.add_argument("-epochs", type=int, default=100, help="Number of epochs to use")
 
     parser.add_argument("--rpr", action="store_true", help="Use a modified Transformer for Relative Position Representations")
+    parser.add_argument("--mamba", action="store_true", help="Use a Mamba Transormer")
+    parser.add_argument("-d_state", type=int, default=16, help="Mamba SSM state expansion factor")
+    parser.add_argument("-d_conv", type=int, default=4, help="Mamba local convolution width")
+    parser.add_argument("-expand", type=int, default=8, help="Mamba block expansion factor")
+    parser.add_argument("-n_mamba", type=int, default=10, help="Mamba block expansion factor")
     parser.add_argument("-max_sequence", type=int, default=2048, help="Maximum midi sequence to consider")
     parser.add_argument("-n_layers", type=int, default=6, help="Number of decoder layers to use")
     parser.add_argument("-num_heads", type=int, default=8, help="Number of heads to use for multi-head attention")
@@ -162,6 +167,7 @@ def parse_generate_args():
     parser.add_argument("-beam", type=int, default=0, help="Beam search k. 0 for random probability sample and 1 for greedy")
 
     parser.add_argument("--rpr", action="store_true", help="Use a modified Transformer for Relative Position Representations")
+    parser.add_argument("--mamba", action="store_true", help="Use a Mamba Transormer")
     parser.add_argument("-max_sequence", type=int, default=2048, help="Maximum midi sequence to consider")
     parser.add_argument("-n_layers", type=int, default=6, help="Number of decoder layers to use")
     parser.add_argument("-num_heads", type=int, default=8, help="Number of heads to use for multi-head attention")
